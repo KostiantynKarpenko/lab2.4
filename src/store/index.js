@@ -2,8 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import { initializeApp } from 'firebase/app'
-import { 
-  // getDoc, 
+import {
   getDocs, 
   collection, 
   doc, 
@@ -24,9 +23,6 @@ const APP = initializeApp({
 
 const DB = getFirestore(APP)
 
-// function getDocFromDB(c, d){
-//   return getDoc(doc(DB, c, d));
-// }
 function getCollectionFromDB(c){
   return getDocs(collection(DB, c));
 }
@@ -53,8 +49,6 @@ export default new Vuex.Store({
           }
          return state.notes;
        })
-      
-      
     },
   },
   actions: {
