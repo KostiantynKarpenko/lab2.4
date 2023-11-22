@@ -39,34 +39,8 @@ export default {
         }
         
     },
-    watch: {
-        // text() {
-        //     if(this.text){
-        //         this.notes[this.noteIndex].text = this.text
-        //         this.$store.dispatch('updateNote', this.notes[this.noteIndex]);
-        //     }
-        // },
-        category(){
-            this.notes[this.noteIndex].category = this.category;
-            this.$store.dispatch('updateNote', this.notes[this.noteIndex]);
-        }
-    },
-    mutations:{
-        
-
-    },
-    computed: {
-        categories() {
-            return this.$store.state.categories;
-        },
-    },
     created(){
-        this.notes = this.$store.getters['getNotes'];
-        this.filteredNotes = this.$store.getters['filteredNotes'];
-        this.category = this.note.category;
-        this.id = this.note.id;
-        
-        // this.text = this.note.text;
+        this.categories = this.$store.getters['getCategories']
     }
 }
 </script>
