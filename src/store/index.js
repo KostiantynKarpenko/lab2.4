@@ -36,7 +36,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     notes:[],
-    categories:[]
+    categories:[],
+    filteredNotes: []
   },
   getters: {
     getNotes(state){
@@ -44,9 +45,33 @@ export default new Vuex.Store({
     },
     getCategories(state){
       return state.categories;
-    }
+    },
+    filteredNotes: (state) => (selectedFilters) => {
+        return state.notes.filter(note => {
+          if (selectedFilters.length > 0){
+            return selectedFilters.includes(String(note.category));
+          }
+         return state.notes;
+       })
+      
+      
+    },
   },
   actions: {
+    addNote(context, note){
+      context.state.notes.push(note);
+      return setDoc(doc(DB, 'Notes', note.id), note)
+    },
+    updateNote(context, data){
+      const noteIndex = context.state.notes.findIndex(el => { return el.id === data.id; })
+      context.state.notes.splice(noteIndex, 1, data);
+      setDoc(doc(DB, 'Notes', data.id), data);
+    },
+    deleteNote(context, data){
+      const noteIndex = context.state.notes.findIndex(el => { return el.id === data.id; })
+      context.state.notes.splice(noteIndex, 1);
+      deleteDoc(doc(DB, 'Notes', data.id));
+    },
     fetchNotes(context) {
       getCollectionFromDB('Notes')
         .then(response => {
@@ -64,24 +89,6 @@ export default new Vuex.Store({
             context.state.categories.push(document.data());
         })
       });
-    },
-    addNote(context, note){
-      context.state.notes.push(note);
-      return setDoc(doc(DB, 'Notes', note.id), note)
-    },
-    updateNote(context, note){
-      return setDoc(doc(DB, 'Notes', note.id), note)
-    },
-    setCategory(context, data) {
-      const index = context.state.notes.findIndex(note => note.id == data.note.id);
-      if (index != -1) {
-        context.state.notes[index].category = data.category;
-        console.log('category has changed to ' + data.category);
-        return setDoc(doc(DB, 'Notes', data.note.id), data.note)
-      }
-    },
-    removeNote(context, id) {
-      deleteDoc(doc(DB, 'Notes', id));
     }
   }
 })

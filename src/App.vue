@@ -5,8 +5,10 @@
           <a>Filter by category:</a>
           <div class="drop-list">
             <ul class="filters-list">
-              <li class="filters-item" v-for="(category, index) in categories" :key="index">
-                <input type="checkbox" :id="'fc' + category.id" @input="filterTrigger({id: category.id, name: category.name})">
+              <li class="filters-item" v-for="category in categories" :key="category.id">
+                <input type="checkbox"
+                :id="'fc' + category.id"
+                @input="filterTrigger({id: category.id, name: category.name})">
                 <label :for="'fc' + category.id">{{ category.name }}</label>
               </li>
             </ul>
@@ -14,7 +16,11 @@
         </div>
       </div>
     <div class="area" @mousedown="mousedown" @mousemove="mousemove" @mouseup="mouseup">
-      <NoteBox v-for="(note, index) in filteredNotes" :key="index" :note-index="index" :noteIndex="index" :style="'left: ' + note.coords.x + 'px; top: ' + note.coords.y + 'px;'"/>
+      <NoteBox v-for="(note, index) in filteredNotes" 
+      :key="note.id" 
+      :note-index="index" 
+      :note="note" 
+      :style="'left: ' + note.coords.x + 'px; top: ' + note.coords.y + 'px;'"/>
     </div>
     <div class="actions">
       <button class="btn" @click=addNote()>Add note</button>
@@ -52,13 +58,9 @@ export default{
     categories(){
       return this.$store.getters['getCategories']
     },
-    filteredNotes() {
-      return (this.selectedFilters.length)
-        ? this.notes.filter(note => {
-          return ~this.selectedFilters.indexOf(note.category.toLowerCase());
-        })
-        : this.notes;
-      }
+    filteredNotes(){
+      return this.$store.getters['filteredNotes'](this.selectedFilters)
+    }
   },
   methods:{
     addNote() {
@@ -102,7 +104,6 @@ export default{
     },
     filterTrigger(category){
       let elIndex = this.selectedFilters.indexOf(category.id);
-
       if (elIndex != (-1)) {
         this.selectedFilters.splice(elIndex, 1);
         document.querySelector('#fc' + category.id).checked = false;
@@ -117,7 +118,6 @@ export default{
   }
 }
 </script>
-
 
 <style lang="less">
   @import './assets/less/index.less';
