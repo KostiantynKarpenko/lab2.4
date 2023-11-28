@@ -25,9 +25,9 @@ export default {
         },
     },
     methods: {
-        deleteNote(data)
+        deleteNote(note)
         {
-            this.$store.dispatch("deleteNote", data);
+            this.$store.dispatch("deleteNote", note);
         },
         updateNoteText(e){
             const updatableNote = {...this.note, text: e.target.value}

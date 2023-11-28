@@ -56,15 +56,15 @@ export default new Vuex.Store({
       context.state.notes.push(note);
       return setDoc(doc(DB, 'Notes', note.id), note)
     },
-    updateNote(context, data){
-      const noteIndex = context.state.notes.findIndex(el => { return el.id === data.id; })
-      context.state.notes.splice(noteIndex, 1, data);
-      setDoc(doc(DB, 'Notes', data.id), data);
+    updateNote(context, note){
+      const noteIndex = context.state.notes.findIndex(el => { return el.id === note.id; })
+      context.state.notes.splice(noteIndex, 1, note);
+      setDoc(doc(DB, 'Notes', note.id), note);
     },
-    deleteNote(context, data){
-      const noteIndex = context.state.notes.findIndex(el => { return el.id === data.id; })
+    deleteNote(context, note){
+      const noteIndex = context.state.notes.findIndex(el => { return el.id === note.id; })
       context.state.notes.splice(noteIndex, 1);
-      deleteDoc(doc(DB, 'Notes', data.id));
+      deleteDoc(doc(DB, 'Notes', note.id));
     },
     fetchNotes(context) {
       getCollectionFromDB('Notes')
