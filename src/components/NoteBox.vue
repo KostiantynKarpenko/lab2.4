@@ -37,7 +37,6 @@ export default {
             const updatableNote = {...this.note, category: e.target.value}
             this.$store.dispatch("updateNote", updatableNote)
         }
-        
     },
     created(){
         this.categories = this.$store.getters['getCategories']
